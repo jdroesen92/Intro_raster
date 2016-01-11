@@ -11,7 +11,7 @@ getwd()
 
 source('R/calcNDVI.R')
 source('R/difNDVI.R')
-source('R/calcNDVI.R')
+source('R/.R')
 
 #downloading the data
 download.file(url='https://www.dropbox.com/s/i1ylsft80ox6a32/LC81970242014109-SC20141230042441.tar.gz?dl=0', destfile='Wageningen8.tar', method='wget')
@@ -40,6 +40,10 @@ plot(ndvi2014)
 fmask1990 <- rstack1990[[1]]
 fmask2014 <- rstack2014[[1]]
 
+cloud2NA <- function(x, y){
+	x[y != 0] <- NA
+	return(x)
+}
 cloudfree1990 <- cloud2NA(ndvi1990, fmask1990)
 cloudfree2014 <- cloud2NA(ndvi2014, fmask2014)
 
@@ -56,4 +60,4 @@ NDVIdiff <- NDVIdiff(cloudfree2014,cloudfree1990)
 #plot with in yellow small changes, in red a decrease in NDVI values and in green an increase of NDVI values
 breakpoints <- c(-1.5, -0.2, 0.2, 1.5)
 colors <- c("red", "yellow", "green")
-plot(NDVIdiff, breaks=breakpoints, col = colors)
+plot(NDVIdiff, breaks=breakpoints, col = colors, main="NDVI difference between 2014 and 1990", xlab="Longitude", ylab="Latitude")
